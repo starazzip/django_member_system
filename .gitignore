@@ -1,0 +1,11 @@
+venv/*
+cache/*
+*.pyc
+output/*
+**-env
+.vscode/*
+*.zip
+*.log
+lock/*
+.Ds_Store
+*.sh
