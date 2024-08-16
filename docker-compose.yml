@@ -1,0 +1,61 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: mysql_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: qwer1234
+      MYSQL_DATABASE: member_system
+      MYSQL_USER: db_admin
+      MYSQL_PASSWORD: qwer1234
+    ports:
+      - "13306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - mynetwork
+
+  redis:
+    image: redis:alpine
+    container_name: redis
+    restart: always
+    ports:
+      - "6379:6379"
+    networks:
+      - mynetwork
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    restart: always
+    environment:
+      PMA_HOST: db
+      MYSQL_ROOT_PASSWORD: qwer1234
+    ports:
+      - "18080:80"
+    depends_on:
+      - db
+    networks:
+      - mynetwork
+  # web:
+  #   build: .
+  #   container_name: django_web
+  #   restart: always
+  #   command: python manage.py runserver 0.0.0.0:8000
+  #   volumes:
+  #     - .:/usr/src/app
+  #   ports:
+  #     - "8000:8000"
+  #   depends_on:
+  #     - db
+  #     - redis
+  #   networks:
+  #     - mynetwork
+
+volumes:
+  mysql_data:
+
+networks:
+  mynetwork:
+    driver: bridge
